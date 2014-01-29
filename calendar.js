@@ -15,31 +15,32 @@ var weekdays = { "0": "Sunday", "1": "Monday", "2": "Tuesday", "3": "Wednesday",
 
 var startdate = "January";
 
-// console.log("year: ", current_year);
-// console.log("month #: ", month_num);
-// console.log("# of days in current month: ", days_in_c_month);
-// console.log("month started on a ", weekdays[day_of_first]);
-// console.log("finishes on a ", weekdays[last_of_month]);
-
 function generateCalendar() {
     var now = new Date(),
         current_month = now.getMonthName(),
-        current_year = now.getFullYear(),
-        month_num = Date.getMonthNumberFromName(current_month),
-        days_in_c_month = Date.getDaysInMonth(current_year, month_num);
-    var day_of_first = new Date(current_year, month_num, 1).getDay();
-    var last_of_month = new Date(current_year, month_num, days_in_c_month).getDay();
-    return generateMonthMarkup(current_month, current_year, month_num, days_in_c_month, day_of_first, last_of_month);
+        current_year = now.getFullYear();
+    var month = getMonthDetails(current_month, current_year);
+    return generateMonthMarkup(month, current_year);
 }
 
-function generateMonthMarkup(month, year, mnum, no_days, firstday, lastday) {
+function getMonthDetails(month, year) {
+    var m = {};
+    m.name = month;
+    m.num = Date.getMonthNumberFromName(month);
+    m.no_days = Date.getDaysInMonth(year, m.num);
+    m.firstday = new Date(year, m.num, 1).getDay();
+    m.lastday = new Date(year, m.num, m.no_days).getDay();
+    return m;
+}
+
+function generateMonthMarkup(month, year) {
     // probably need to sort this to handle a given date
-    var markup = '<h1>'+ month + ' ' + year +'</h1>\n';
+    var markup = '<h1>'+ month.name + ' ' + year +'</h1>\n';
     markup += weekdays_markup;
     markup += '<section class="calendar cf">\n';
-    markup += generateEndOfLastMonth(firstday, mnum, year);
-    markup += generateMonthList(no_days, month, year);
-    markup += generateStartOfNextMonth(lastday);
+    markup += generateEndOfLastMonth(month.firstday, month.num, year);
+    markup += generateMonthList(month.no_days, month.name, year);
+    markup += generateStartOfNextMonth(month.lastday);
     markup += '</section>\n';
     return markup;
 }
