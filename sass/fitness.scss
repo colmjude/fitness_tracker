@@ -1,0 +1,84 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+@import "colours";
+
+html {
+    font: 1em/1.5 "Helvetica Neue", Helvetica, sans-serif;
+    color: $dgrey;
+    padding-top: 1.5rem;
+}
+
+// http://csswizardry.com/2012/06/single-direction-margin-declarations/
+h1, h2, h3, h4, h5, h6, hgroup, header,
+footer, table, div, section, ol, ul {
+    margin-bottom: 1.5rem;
+}
+
+h1 {
+    text-align: center;
+    // check this in ratio please
+    font-size: 3rem;
+}
+
+.fitness-tracker {
+    margin: 0 auto;
+    width: 46.5rem;
+
+    .calendar {
+        ul, ol {
+            margin-bottom: 0;
+        }
+    }
+    li {
+        width: 6em;
+        float: left;
+        margin-left: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+.weekdays li {
+    text-align: center;
+    border: 1px solid #fff;
+    margin-bottom: 0;
+}
+
+.calendar li {
+    height: 6em;
+    border: 1px solid $lgrey;
+    position: relative;
+    color: $lgrey;
+
+    &:after {
+        content: attr(data-day);
+        position: absolute;
+        top: 0.25rem; left: 0.5rem;
+    }
+}
+
+.thismonth li {
+    border-color: $dgrey;
+    color: $dgrey;
+}
+
+footer {
+    text-align: center;
+}
+
+.small {
+    font-size: 0.875rem;
+}
+
+.thismonth .activity { border-color: white; color: white; }
+.run { background: $blue; }
+.squash { background: $green; }
+.gym { background: $orange; }
+
+.cf:before, .cf:after { content: ""; display: table; }
+.cf:after { clear: both; }
+/* IE 6/7 */
+.cf { zoom: 1; }
