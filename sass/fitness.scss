@@ -6,10 +6,14 @@
 @import "compass/reset";
 @import "colours";
 
+* {box-sizing: border-box;}
+
 html {
     font: 1em/1.5 "Helvetica Neue", Helvetica, sans-serif;
     color: $dgrey;
-    padding-top: 1.5rem;
+    @media only screen and (min-width: 46.5rem) {
+        padding-top: 1.5rem;
+    }
 }
 
 // http://csswizardry.com/2012/06/single-direction-margin-declarations/
@@ -24,9 +28,18 @@ h1 {
     font-size: 3rem;
 }
 
+h1 {
+    background: $dgrey;
+    color: $lgrey;
+    @media only screen and (min-width: 46.5rem) {
+        background: $lgrey;
+        color: $dgrey;
+    }
+}
+
 .fitness-tracker {
     margin: 0 auto;
-    width: 46.5rem;
+    width: 100%;
 
     .calendar {
         ul, ol {
@@ -34,34 +47,81 @@ h1 {
         }
     }
     li {
-        width: 6em;
-        float: left;
-        margin-left: 0.5rem;
-        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+    @media only screen and (min-width: 46.5rem) {
+        width: 46.5rem;
+        li {
+            width: 6em;
+            float: left;
+            margin-left: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
     }
 }
 
-.weekdays li {
-    text-align: center;
-    border: 1px solid #fff;
-    margin-bottom: 0;
+.weekdays {
+    display: none;
+    @media only screen and (min-width: 46.5rem) {
+        display: block;
+    }
+    li {
+        text-align: center;
+        border: 1px solid #fff;
+        margin-bottom: 0;
+    }
 }
 
 .calendar li {
-    height: 6em;
-    border: 1px solid $lgrey;
+    height: 3rem;
+    border-top: 1px solid $lgrey;
     position: relative;
     color: $lgrey;
 
-    &:after {
+    @media only screen and (min-width: 46.5rem) {
+        height: 6em;
+        border: 1px solid $lgrey;
+    }
+
+    &:before {
         content: attr(data-day);
         position: absolute;
-        top: 0.25rem; left: 0.5rem;
+        line-height: 1rem;
+        top: 1rem; left: 0.5rem;
+        @media only screen and (min-width: 46.5rem) {
+            top: 0.5rem;
+        }
+    }
+    &:after {
+        content: attr(data-day-initial);
+        position: absolute;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.15);
+        top: 0.5rem; right: 0.5rem;
+        text-align: center;
+        line-height: 2em;
+        @media only screen and (min-width: 46.5rem) {
+            display: none;
+        }
+    }
+    &.run:after { color: $blue; }
+    &.gym:after { color: $orange; }
+    &.squash:after { color: $green; }
+}
+
+.lastmonth, .nextmonth {
+    display: none;
+    @media only screen and (min-width: 46.5rem) {
+        display: block;
     }
 }
 
 .thismonth li {
-    border-color: $dgrey;
+    @media only screen and (min-width: 46.5rem) {
+        border-color: $dgrey;
+    }
     color: $dgrey;
 }
 
@@ -73,7 +133,7 @@ footer {
     font-size: 0.875rem;
 }
 
-.thismonth .activity { border-color: white; color: white; }
+.thismonth .activity { border: none; color: white; }
 .run { background: $blue; }
 .squash { background: $green; }
 .gym { background: $orange; }
