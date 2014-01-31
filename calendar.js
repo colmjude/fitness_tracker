@@ -15,45 +15,73 @@ var weekdays = { "0": "Sunday", "1": "Monday", "2": "Tuesday", "3": "Wednesday",
 
 var startdate = "January";
 
-function generateCalendar() {
+// mps = months either side
+function generateCalendar(months) {
+    var ms = months || 1;
     var now = new Date(),
-        current_month = now.getMonthName(),
+        current_month = now.getMonth(),
         current_year = now.getFullYear();
-    var month = getMonthDetails(current_month, current_year);
-    return generateMonthMarkup(month, current_year);
+    var markup = "";
+    var i = 0 - ms;
+    while (i <= ms) {
+        var m = calculateMonth({month: current_month, year: current_year}, i);
+        markup += generateMonthMarkup(getMonthDetails(m.month, m.year));
+        i++;
+    }
+    return markup;
 }
 
 function getMonthDetails(month, year) {
     var m = {};
-    m.name = month;
-    m.num = Date.getMonthNumberFromName(month);
+    // handle if month is passed as name e.g. January or num e.g. 0
+    if( isString(month) ) {
+        m.name = month;
+        m.num = Date.getMonthNumberFromName(month);
+    } else {
+        m.name = new Date(year, month, 1).getMonthName();
+        m.num = month;
+    }
     m.no_days = Date.getDaysInMonth(year, m.num);
     m.firstday = new Date(year, m.num, 1).getDay();
     m.lastday = new Date(year, m.num, m.no_days).getDay();
+    m.year = year;
     return m;
 }
 
-function generateMonthMarkup(month, year) {
+function calculateMonth(obj, diff) {
+    // default to -1 if not set
+    var diff = (diff === undefined) ? -1 : diff;
+    var m_diff = diff % 12;
+    var orig_m = obj.month;
+    // if: below 0, in calendar 0 equivalent to 12
+    // else if: above 11, as about 12 eqivalent to 0
+    // else: not crossing year range
+    if(obj.month + m_diff < 0) {
+        obj.month = 12 + (obj.month + m_diff);
+    } else if(obj.month + m_diff > 11) {
+        obj.month = 0 + (obj.month + m_diff) - 12;
+    } else {
+        obj.month = obj.month + m_diff;
+    }
+    obj.year = obj.year + Math.floor((diff + orig_m)/12);
+    return obj;
+}
+
+function generateMonthMarkup(month) {
     // probably need to sort this to handle a given date
-    var markup = '<h1>'+ month.name + ' ' + year +'</h1>\n';
+    var markup = '<h1>'+ month.name + ' ' + month.year +'</h1>\n';
     markup += weekdays_markup;
     markup += '<section class="calendar cf">\n';
-    markup += generateEndOfLastMonth(month.firstday, month.num, year);
-    markup += generateMonthList(month.no_days, month.name, year);
+    markup += generateEndOfLastMonth(month.firstday, month.num, month.year);
+    markup += generateMonthList(month.no_days, month.name, month.year);
     markup += generateStartOfNextMonth(month.lastday);
     markup += '</section>\n';
     return markup;
 }
 
 function generateEndOfLastMonth(day_num, month_num, year) {
-    var last_month;
-    if (month_num === 0) {
-        last_month = 11;
-        year = year - 1;
-    } else {
-        last_month = month_num - 1;
-    }
-    var days_last_month = Date.getDaysInMonth(year, last_month);
+    var lm = calculateMonth({ month: month_num, year: year }, -1);
+    var days_last_month = Date.getDaysInMonth(lm.year, lm.month);
     var list = '<ol class="lastmonth">\n';
     for( var i = 0; i < day_num; i++ ) {
         list += '\t<li data-day="' + (days_last_month - (day_num - (i+1))) + '"></li>\n';
@@ -127,4 +155,10 @@ function writeHTMLPage(arr, name) {
 function isFunction(functionToCheck) {
     var getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+var toString = Object.prototype.toString;
+
+function isString(obj) {
+  return toString.call(obj) == '[object String]';
 }
