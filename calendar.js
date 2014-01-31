@@ -67,6 +67,14 @@ function calculateMonth(obj, diff) {
     return obj;
 }
 
+Date.prototype.getWeekday = function() {
+    return weekdays[this.getDay()];
+}
+
+Date.prototype.getWeekdayInitial = function() {
+    return this.getWeekday().charAt(0);
+}
+
 function generateMonthMarkup(month) {
     // probably need to sort this to handle a given date
     var markup = '<h1>'+ month.name + ' ' + month.year +'</h1>\n';
@@ -94,7 +102,8 @@ function generateMonthList(num, name, year) {
     var list = '<ol class="thismonth ' + name.toLowerCase() + '">\n';
     for(var i = 0; i < num; i++) {
         var date = generateDateStr(i+1, name, year);
-        var day = '\t<li data-date="' + date + '" data-day="' + (i+1) + '"></li>\n';
+        var day_init = new Date(year, Date.getMonthNumberFromName(name), i+1).getWeekdayInitial();
+        var day = '\t<li data-date="' + date + '" data-day="' + (i+1) + '" data-day-initial="' + day_init + '"></li>\n';
         list += day;
     }
     list += '</ol>\n';
