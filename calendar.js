@@ -13,7 +13,7 @@ var weekdays = { "0": "Sunday", "1": "Monday", "2": "Tuesday", "3": "Wednesday",
 '    <li>S</li>',
 '</ol>'].join('\n');
 
-var startdate = "January";
+var startdate = new Date(2014, 0);
 
 // mps = months either side
 function generateCalendar(months) {
@@ -25,7 +25,9 @@ function generateCalendar(months) {
     var i = 0 - ms;
     while (i <= ms) {
         var m = calculateMonth({month: current_month, year: current_year}, i);
-        markup += generateMonthMarkup(getMonthDetails(m.month, m.year));
+        if(startdate.compareTo(new Date(m.year, m.month)) < 1) {
+            markup += generateMonthMarkup(getMonthDetails(m.month, m.year));
+        }
         i++;
     }
     return markup;
