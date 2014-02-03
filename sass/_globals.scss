@@ -1,0 +1,7 @@
+* {box-sizing: border-box;}
+
+// http://csswizardry.com/2012/06/single-direction-margin-declarations/
+h1, h2, h3, h4, h5, h6, hgroup, header,
+footer, table, div, section, ol, ul {
+    margin-bottom: 1.5rem;
+}

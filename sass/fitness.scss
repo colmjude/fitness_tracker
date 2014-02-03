@@ -5,8 +5,7 @@
 
 @import "compass/reset";
 @import "colours";
-
-* {box-sizing: border-box;}
+@import "globals";
 
 html {
     font: 1em/1.5 "Helvetica Neue", Helvetica, sans-serif;
@@ -14,12 +13,6 @@ html {
     @media only screen and (min-width: 46.5rem) {
         padding-top: 1.5rem;
     }
-}
-
-// http://csswizardry.com/2012/06/single-direction-margin-declarations/
-h1, h2, h3, h4, h5, h6, hgroup, header,
-footer, table, div, section, ol, ul {
-    margin-bottom: 1.5rem;
 }
 
 h1 {
